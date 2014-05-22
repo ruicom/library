@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+
+	<!-- Enables controllers mapped with @RequestMapping annotations, formatting annotations @NumberFormat @DateTimeFormat, and JSR 303 style validation -->
+	<mvc:annotation-driven/>
+	
+	<!-- 扫描 -->
+	<!-- Scans the classpath of this application for @Components to deploy as beans -->
+	
+	<!-- <mvc:view-controller path="/login"  view-name="login"/>path是访问的路径，login是视图的名称 （实际的路径） -->
+	
+	<!--登录和注册  -->
+	<mvc:view-controller path="/login" view-name="login"/>
+	<mvc:view-controller path="/adminIndex" view-name="adminIndex"/>
+	<mvc:view-controller path="/userIndex" view-name="userIndex"/>
+	<mvc:view-controller path="/register" view-name="register"/>
+	
+	<!--用户管理  -->
+	<mvc:view-controller path="/deleteUser" view-name="deleteUser"/>
+	<mvc:view-controller path="/modifyUser" view-name="modifyUser"/>
+	<mvc:view-controller path="/modifyUserEdit" view-name="modifyUserEdit"/>
+	
+	<!--书籍管理  -->
+	<mvc:view-controller path="/addBook" view-name="addBook"/>
+	<mvc:view-controller path="/deleteBook" view-name="deleteBook"/>
+	<mvc:view-controller path="/modifyBookSelect" view-name="modifyBookSelect"/>
+	<mvc:view-controller path="/bookBook" view-name="bookBook"/>
+	<mvc:view-controller path="/" view-name=""/>
+	
+	 <context:annotation-config/>
+   	
+    <context:component-scan base-package="controller"/>
+    
+    <!--    定义一个类 -->
+    <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+    </bean>
+   
+   <bean id="handlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    </bean>
+   
+   
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+
+	<mvc:resources location="/resources/" mapping="/resources/**"/><!--resource里面的文件夹是放静态资源的，mapping  -->
+	
+</beans>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+<!--
+
+	spring的配置文件
+
+
+  -->
+  
+  
+	<!-- c3p0 dataSource 这个是数据源-->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+
+		<!-- 加载驱动 -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+
+		<!-- database url -->
+		<property name="jdbcUrl" value="jdbc:mysql://localhost/library" />
+
+		<!-- database username -->
+		<property name="user" value="root" />
+
+		<!-- database password -->
+		<property name="password" value="" />
+
+		<!-- 当连接池用完时客户端调用getConnection()后等待获取新连接的时间，超时后将抛出SQLException，如设为0则无限期等待。单位毫秒，默认为0 -->
+		<property name="checkoutTimeout" value="0" /> 
+
+	</bean>
+	
+  
+	<!-- sessionFactory -->
+  	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+  		
+  		<!--hibernate交给spring管理  -->
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="hibernateProperties">
+	      	<value>
+	      	
+	        	hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+	        	
+	        	<!-- cureentSesssion -->
+	        	hibernate.current_session_context_class=org.springframework.orm.hibernate4.SpringSessionContext
+	
+	        	<!-- sql -->
+	        	hibernate.show_sql=true
+	        	hibernate.format_sql=true
+	 			hibernate.hbm2ddl.auto=update
+	      	</value>
+    	</property>
+    
+    	<!--扫描model层，Ormapping -->
+    	<property name="packagesToScan">
+			<value>model</value>
+		</property>
+  	</bean>
+  	
+  
+  	<!-- 事务管理 -->
+  	
+  	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+  	</bean>
+
+
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- dao,这个是ioc，为dao层里面包含@Conpoment或者是他的组件注解的类生成对象然后放到容器里面去-->
+	<context:component-scan base-package="dao"></context:component-scan>
+	  
+</beans>
